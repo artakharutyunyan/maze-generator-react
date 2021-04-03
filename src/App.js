@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Cell from "./Cell.js";
+import "./style.css";
+
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      name: "React",
+    };
+  }
+
+  render() {
+    const walls = {
+      left: true,
+      right: true,
+      top: true,
+      bottom: true,
+    };
+    return (
+      <div>
+        <p>Maze Generation</p>
+        <Cell walls={walls} />
+      </div>
+    );
+  }
 }
 
 export default App;
