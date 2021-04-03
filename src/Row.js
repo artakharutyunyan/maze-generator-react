@@ -1,16 +1,16 @@
 import React, { Component } from "react";
+import { render } from "react-dom";
+import PropTypes from "prop-types";
 
 import Cell from "./Cell.js";
 
 class Row extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.currentCell = 0;
     this.timesTicked = 0;
     this.speed = 500;
-    this.chanceToJoin = 0.3;
-    this.width = 10;
-    this.height = 10;
+    this.chanceToJoin = 0.66; // x100 for %
     this.initialWalls = {
       left: true,
       right: true,
@@ -41,7 +41,7 @@ class Row extends Component {
   }
 
   willJoin() {
-    return Math.random() > this.chanceToJoin;
+    return Math.random() < this.chanceToJoin;
   }
 
   getCellsAndHighlightCurrent() {
@@ -84,8 +84,11 @@ class Row extends Component {
   }
 
   joinSomeCells() {
-    if (this.currentCell > this.width - 1) {
+    if (this.currentCell > this.props.width - 1) {
       clearInterval(this.timerID);
+      // tell the Maze that the row is done, so we can pass
+      // the state of the row to the next Row
+      this.props.sendRowState(this.state.cells, this.props.index);
       return;
     }
 
@@ -109,8 +112,8 @@ class Row extends Component {
   tick() {
     this.timesTicked++;
 
-    if (this.state.cells.length >= this.width) {
-      this.currentCell = this.timesTicked - this.width - 1;
+    if (this.state.cells.length >= this.props.width) {
+      this.currentCell = this.timesTicked - this.props.width - 1;
       this.joinSomeCells();
       return;
     }
@@ -121,5 +124,11 @@ class Row extends Component {
     return <div>{this.state.cells}</div>;
   }
 }
+
+Row.propTypes = {
+  width: PropTypes.number,
+  index: PropTypes.number,
+  sendRowState: PropTypes.func,
+};
 
 export default Row;
