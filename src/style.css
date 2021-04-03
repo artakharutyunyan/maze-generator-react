@@ -4,8 +4,15 @@ p {
 }
 
 .cell {
+  display: inline-flex;
   width: 25px;
   height: 25px;
+  justify-content: center;
+  align-items: center;
+}
+
+.focused {
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .border-left {
