@@ -5,10 +5,12 @@ p {
 
 .cell {
   display: inline-flex;
-  width: 25px;
-  height: 25px;
+  width: 50px;
+  height: 50px;
   justify-content: center;
   align-items: center;
+  border: 1px solid white;
+  font-size: 16px;
 }
 
 .active {

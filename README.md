@@ -1,1 +1,1 @@
-# maze-generation-ellers-algorithm-react
+# Maze Generator with Eller's algorithm

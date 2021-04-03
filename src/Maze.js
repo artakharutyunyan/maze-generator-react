@@ -10,7 +10,6 @@ class Maze extends Component {
     this.width = 10;
     this.state = {
       rows: [],
-      cells: [],
     };
   }
 
@@ -29,7 +28,23 @@ class Maze extends Component {
   }
 
   receiveCompleteRow(cells, index) {
-    if (index === 3) {
+    if (index === this.height - 1) {
+      return;
+    }
+
+    if (index === this.height - 2) {
+      this.setState({
+        rows: [
+          ...this.state.rows,
+          <Row
+            index={index + 1}
+            width={this.width}
+            previousRowCells={cells}
+            lastRow={true}
+            sendRowState={this.receiveCompleteRow.bind(this)}
+          />,
+        ],
+      });
       return;
     }
 
@@ -42,7 +57,7 @@ class Maze extends Component {
         <Row
           index={index + 1}
           width={this.width}
-          //  previousRowCells={newCells[index]}
+          previousRowCells={cells}
           sendRowState={this.receiveCompleteRow.bind(this)}
         />,
       ],
