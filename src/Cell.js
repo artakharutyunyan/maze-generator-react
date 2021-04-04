@@ -9,7 +9,7 @@ class Cell extends Component {
   getWallsToShow() {
     const { walls } = this.props;
     return Object.keys(walls).reduce((acc, currentWall) => {
-      return `${acc} ${walls[currentWall] ? `border-${currentWall}` : ""}`;
+      return `${acc} ${walls[currentWall] ? `cell-border-${currentWall}` : ""}`;
     }, "cell ");
   }
 

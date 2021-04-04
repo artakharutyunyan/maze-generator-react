@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import Row from "./Row.js";
 import Actions from "./Actions.js";
-import "./style.css";
+import "./style.scss";
 
 class Maze extends Component {
   constructor() {
@@ -12,6 +12,7 @@ class Maze extends Component {
       width: 10,
       rows: [],
       completed: false,
+      speed: 0,
       // the less chance, the more vertical walls
       chanceToJoin: 0.5,
     };
@@ -19,6 +20,7 @@ class Maze extends Component {
     this.resetMaze = this.resetMaze.bind(this);
     this.setDimension = this.setDimension.bind(this);
     this.setChance = this.setChance.bind(this);
+    this.setSpeed = this.setSpeed.bind(this);
   }
 
   startMaze() {
@@ -28,6 +30,7 @@ class Maze extends Component {
           index={0}
           width={this.state.width}
           chanceToJoin={this.state.chanceToJoin}
+          speed={this.state.speed}
           cells={false}
           previousRowCells={false}
           sendRowState={this.receiveCompleteRow.bind(this)}
@@ -52,6 +55,7 @@ class Maze extends Component {
             index={index + 1}
             width={this.state.width}
             chanceToJoin={this.state.chanceToJoin}
+            speed={this.state.speed}
             previousRowCells={cells}
             lastRow={true}
             sendRowState={this.receiveCompleteRow.bind(this)}
@@ -71,6 +75,7 @@ class Maze extends Component {
           index={index + 1}
           width={this.state.width}
           chanceToJoin={this.state.chanceToJoin}
+          speed={this.state.speed}
           previousRowCells={cells}
           sendRowState={this.receiveCompleteRow.bind(this)}
         />,
@@ -90,6 +95,10 @@ class Maze extends Component {
     this.setState({ chanceToJoin: event.target.value });
   }
 
+  setSpeed(event) {
+    this.setState({ speed: event.target.value });
+  }
+
   resetMaze() {
     if (!this.state.rows.length) {
       this.startMaze();
@@ -102,18 +111,20 @@ class Maze extends Component {
     const { rows, completed } = this.state;
 
     return (
-      <div>
-        <h3>Maze Generator</h3>
+      <div className="container pt-5">
+        <h3 className="pb-3">Maze Generator</h3>
 
         <Actions
           width={this.state.width}
           height={this.state.height}
           rows={this.state.rows}
           chanceToJoin={this.state.chanceToJoin}
+          speed={this.state.speed}
           startMaze={this.startMaze}
           resetMaze={this.resetMaze}
           setDimension={this.setDimension}
           setChance={this.setChance}
+          setSpeed={this.setSpeed}
         />
 
         <div className={`maze ${completed ? "completed" : ""}`}>{rows}</div>

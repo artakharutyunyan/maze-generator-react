@@ -9,7 +9,6 @@ class Row extends Component {
     // the index of the cell inside the row
     this.currentCell = 0;
     this.timesTicked = 0;
-    this.speed = 0;
     this.initialWalls = {
       left: true,
       right: true,
@@ -22,7 +21,7 @@ class Row extends Component {
   }
 
   componentDidMount() {
-    this.timerID = setInterval(() => this.tick(), this.speed);
+    this.timerID = setInterval(() => this.tick(), this.props.speed);
   }
 
   componentWillUnmount() {
@@ -263,6 +262,7 @@ Row.propTypes = {
   width: PropTypes.number,
   index: PropTypes.number,
   chanceToJoin: PropTypes.number,
+  speed: PropTypes.number,
   sendRowState: PropTypes.func,
 };
 
