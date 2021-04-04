@@ -29,7 +29,8 @@ class Row extends Component {
   }
 
   generateNewSetId() {
-    const index = this.props.index * 10;
+    const index =
+      this.props.index * Math.pow(10, this.props.width.toString().length);
     const id = index + this.currentCell;
     return id;
   }
@@ -142,6 +143,7 @@ class Row extends Component {
     const currentCellSetId = cells[this.currentCell].props.setID;
 
     if (
+      !this.props.lastRow &&
       this.willJoin() &&
       this.currentCell < this.props.width - 1 &&
       currentCellSetId !== cells[this.currentCell + 1].props.setID
@@ -165,7 +167,7 @@ class Row extends Component {
         cells = this.joinCellsToSet(
           cells,
           currentCellSetId,
-          cells[this.currentCell].props.setID
+          cells[this.currentCell + 1].props.setID
         );
       }
     }
