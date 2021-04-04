@@ -77,7 +77,7 @@ class Maze extends Component {
   render() {
     return (
       <div>
-        <p>Eller's Algorithm for Perfect Maze Generation in React</p>
+        <p>Maze Generator</p>
 
         <div>
           <button className="reset-cta" onClick={this.resetMaze}>
