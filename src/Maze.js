@@ -12,10 +12,13 @@ class Maze extends Component {
       width: 10,
       rows: [],
       completed: false,
+      // the less chance, the more vertical walls
+      chanceToJoin: 0.5,
     };
 
     this.resetMaze = this.resetMaze.bind(this);
     this.setDimension = this.setDimension.bind(this);
+    this.setChance = this.setChance.bind(this);
   }
 
   startMaze() {
@@ -24,6 +27,7 @@ class Maze extends Component {
         <Row
           index={0}
           width={this.state.width}
+          chanceToJoin={this.state.chanceToJoin}
           cells={false}
           previousRowCells={false}
           sendRowState={this.receiveCompleteRow.bind(this)}
@@ -47,6 +51,7 @@ class Maze extends Component {
           <Row
             index={index + 1}
             width={this.state.width}
+            chanceToJoin={this.state.chanceToJoin}
             previousRowCells={cells}
             lastRow={true}
             sendRowState={this.receiveCompleteRow.bind(this)}
@@ -65,6 +70,7 @@ class Maze extends Component {
         <Row
           index={index + 1}
           width={this.state.width}
+          chanceToJoin={this.state.chanceToJoin}
           previousRowCells={cells}
           sendRowState={this.receiveCompleteRow.bind(this)}
         />,
@@ -78,6 +84,10 @@ class Maze extends Component {
       return;
     }
     this.setState({ height: Number(event.target.value) });
+  }
+
+  setChance(event) {
+    this.setState({ chanceToJoin: event.target.value });
   }
 
   resetMaze() {
@@ -99,9 +109,11 @@ class Maze extends Component {
           width={this.state.width}
           height={this.state.height}
           rows={this.state.rows}
+          chanceToJoin={this.state.chanceToJoin}
           startMaze={this.startMaze}
           resetMaze={this.resetMaze}
           setDimension={this.setDimension}
+          setChance={this.setChance}
         />
 
         <div className={`maze ${completed ? "completed" : ""}`}>{rows}</div>
@@ -109,4 +121,5 @@ class Maze extends Component {
     );
   }
 }
+
 export default Maze;
