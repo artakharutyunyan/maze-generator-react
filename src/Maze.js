@@ -11,9 +11,11 @@ class Maze extends Component {
     this.state = {
       rows: [],
     };
+
+    this.resetMaze = this.resetMaze.bind(this);
   }
 
-  componentDidMount() {
+  startMaze() {
     this.setState({
       rows: [
         <Row
@@ -25,6 +27,10 @@ class Maze extends Component {
         />,
       ],
     });
+  }
+
+  componentDidMount() {
+    this.startMaze();
   }
 
   receiveCompleteRow(cells, index) {
@@ -64,10 +70,21 @@ class Maze extends Component {
     });
   }
 
+  resetMaze() {
+    console.log("yaaauuuu");
+  }
+
   render() {
     return (
       <div>
-        <p>Maze Generator</p>
+        <p>Eller's Algorithm for Perfect Maze Generation in React</p>
+
+        <div>
+          <button className="reset-cta" onClick={this.resetMaze}>
+            Clear Maze
+          </button>
+        </div>
+
         {this.state.rows}
       </div>
     );
