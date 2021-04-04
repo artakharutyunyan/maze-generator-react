@@ -55,12 +55,12 @@ class Row extends Component {
 
     // // check if there will be a
     // // random vertical connection
-    // if (this.willJoin('vertical') && !this.props.lastRow) {
-    //   walls = {
-    //     ...walls,
-    //     bottom: false
-    //   }
-    // }
+    if (this.willJoin("vertical") && !this.props.lastRow) {
+      walls = {
+        ...walls,
+        bottom: false,
+      };
+    }
 
     newCell = <Cell setID={setID} walls={walls} />;
 
@@ -91,12 +91,21 @@ class Row extends Component {
     });
   }
 
-  joinCellToSet(cells, currentCellSetId) {
-    const walls = {
-      ...cells[this.currentCell].props.walls,
-      right: false,
-    };
-    return <Cell setID={currentCellSetId} active={true} walls={walls} />;
+  joinCellsToSet(cells, prevSetId, newSetId) {
+    cells.map((cell) => {
+      if (cell.props.setID !== prevSetId) {
+        return cell;
+      }
+
+      const walls = {
+        ...cell.props.walls,
+        right: false,
+      };
+
+      return <Cell setID={newSetId} active={cell.props.active} walls={walls} />;
+    });
+
+    return cells;
   }
 
   joinCellToLastSet(cells) {
@@ -158,7 +167,13 @@ class Row extends Component {
       this.currentCell < this.props.width - 1 &&
       currentCellSetId !== cells[this.currentCell + 1].props.setID
     ) {
-      cells[this.currentCell] = this.joinCellToSet(cells, currentCellSetId);
+      // TODO: send the next set id and the current cell, to just open up the right
+      // wall for the current cell, but to change the set id for all who share the next cell's set
+      cells = this.joinCellsToSet(
+        cells,
+        cells[this.currentCell],
+        currentCellSetId
+      );
     }
 
     // if last set,
@@ -170,7 +185,11 @@ class Row extends Component {
         cells[this.currentCell + 1].props.setID !==
           cells[this.currentCell].props.setID
       ) {
-        cells[this.currentCell] = this.joinCellToSet(cells, currentCellSetId);
+        cells = this.joinCellsToSet(
+          cells,
+          cells[this.currentCell].props.setID,
+          currentCellSetId
+        );
       }
 
       cells[this.currentCell] = (
@@ -203,6 +222,7 @@ class Row extends Component {
       setMap[setID].push(i);
     });
 
+    // O(n) since it traverses all cells only once
     const cellsToAddVerticalConnection = Object.keys(setMap).map((key) => {
       let hasAVerticalConnection = false;
       setMap[key].forEach((cellIndex) => {

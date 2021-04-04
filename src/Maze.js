@@ -15,6 +15,7 @@ class Maze extends Component {
       speed: 0,
       // the less chance, the more vertical walls
       chanceToJoin: 0.5,
+      hasFormError: false,
     };
 
     this.resetMaze = this.resetMaze.bind(this);
@@ -83,28 +84,53 @@ class Maze extends Component {
     });
   }
 
+  // we want empty strings to represent empty inputs
+  // if we just leave Number(event.target.value), an empty input
+  // will turn to 0 (not good UX)
+  mapToStateValue(event) {
+    const value = event.target.value;
+    if (value === "") {
+      return "";
+    }
+    return Number(value);
+  }
+
   setDimension(dimension, event) {
+    const value = this.mapToStateValue(event);
     if (dimension === "width") {
-      this.setState({ width: Number(event.target.value) });
+      this.setState({ width: value });
       return;
     }
-    this.setState({ height: Number(event.target.value) });
+    this.setState({ height: value });
   }
 
   setChance(event) {
-    this.setState({ chanceToJoin: event.target.value });
+    this.setState({ chanceToJoin: this.mapToStateValue(event.target.value) });
   }
 
   setSpeed(event) {
-    this.setState({ speed: event.target.value });
+    this.setState({ speed: this.mapToStateValue(event.target.value) });
   }
 
-  resetMaze() {
-    if (!this.state.rows.length) {
-      this.startMaze();
+  isFormValid() {
+    const { width, height, chanceToJoin, speed } = this.state;
+
+    return width && height && chanceToJoin >= 0 && chanceToJoin <= 1;
+  }
+
+  resetMaze(e) {
+    e.preventDefault();
+    if (this.state.rows.length) {
+      this.setState({ rows: [], completed: false });
       return;
     }
-    this.setState({ rows: [], completed: false });
+
+    if (this.isFormValid()) {
+      this.setState({ hasFormError: false });
+      this.startMaze();
+    } else {
+      this.setState({ hasFormError: true });
+    }
   }
 
   render() {
@@ -113,6 +139,12 @@ class Maze extends Component {
     return (
       <div className="container pt-5">
         <h3 className="pb-3">Maze Generator</h3>
+
+        <div className="error-text">
+          {this.state.hasFormError
+            ? "Please fill in the inputs correctly"
+            : null}
+        </div>
 
         <Actions
           width={this.state.width}

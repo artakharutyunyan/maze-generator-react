@@ -16,7 +16,7 @@ class Actions extends Component {
     } = this.props;
 
     return (
-      <div className="actions">
+      <form className="actions">
         <div className="main-menu">
           <button className="btn btn-primary" onClick={resetMaze}>
             {rows.length ? "Clear Maze" : "Generate Maze"}
@@ -32,14 +32,15 @@ class Actions extends Component {
 
                   <input
                     id="widthInput"
-                    type="text"
+                    type="number"
+                    required
                     className="form-control"
                     placeholder="maze width in cell units"
                     value={width}
                     onChange={(e) => setDimension("width", e)}
                   />
 
-                  <small class="form-text text-muted">
+                  <small className="form-text text-muted">
                     The number of horizontal cells in the maze
                   </small>
                 </div>
@@ -51,14 +52,15 @@ class Actions extends Component {
 
                   <input
                     id="heightInput"
-                    type="text"
+                    type="number"
+                    required
                     className="form-control"
                     value={height}
                     placeholder="maze height in cell units"
                     onChange={(e) => setDimension("height", e)}
                   />
 
-                  <small class="form-text text-muted">
+                  <small className="form-text text-muted">
                     The number of vertical cells in the maze
                   </small>
                 </div>
@@ -74,14 +76,15 @@ class Actions extends Component {
 
                   <input
                     id="mergeChanceInput"
-                    type="text"
+                    type="number"
+                    required
                     className="form-control"
                     value={chanceToJoin}
                     placeholder="% chance to have a wall"
                     onChange={(e) => setChance(e)}
                   />
 
-                  <small class="form-text text-muted">
+                  <small className="form-text text-muted">
                     Chance to join cells horizontally. values from 0 to 1. A
                     high chance tends to create horizontal mazes while a low
                     chance creates more vertical ones.
@@ -96,14 +99,15 @@ class Actions extends Component {
 
                   <input
                     id="speedInput"
-                    type="text"
+                    type="number"
+                    required
                     className="form-control"
                     value={speed}
                     placeholder="speed in ms"
                     onChange={(e) => setSpeed(e)}
                   />
 
-                  <small class="form-text text-muted">
+                  <small className="form-text text-muted">
                     How fast you want the maze to generate. Units in
                     milliseconds. Slower speed gives you a better visual insight
                     on how the algorithm works
@@ -113,7 +117,7 @@ class Actions extends Component {
             </div>
           </div>
         )}
-      </div>
+      </form>
     );
   }
 }
