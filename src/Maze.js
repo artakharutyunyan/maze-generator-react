@@ -105,15 +105,15 @@ class Maze extends Component {
   }
 
   setChance(event) {
-    this.setState({ chanceToJoin: this.mapToStateValue(event.target.value) });
+    this.setState({ chanceToJoin: this.mapToStateValue(event) });
   }
 
   setSpeed(event) {
-    this.setState({ speed: this.mapToStateValue(event.target.value) });
+    this.setState({ speed: this.mapToStateValue(event) });
   }
 
   isFormValid() {
-    const { width, height, chanceToJoin, speed } = this.state;
+    const { width, height, chanceToJoin } = this.state;
 
     return width && height && chanceToJoin >= 0 && chanceToJoin <= 1;
   }
