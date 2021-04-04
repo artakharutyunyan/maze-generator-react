@@ -88,16 +88,15 @@ class Actions extends Component {
                   />
 
                   <small className="form-text text-muted">
-                    Chance to join cells horizontally. A high chance tends to
-                    create horizontal mazes while a low chance creates more
-                    vertical ones.
+                    A high chance tends to create horizontal mazes while a low
+                    chance creates more vertical ones.
                   </small>
                 </div>
               </div>
               <div className="col-12 col-sm-6 col-lg-4 col-xl-3">
                 <div className="form-group">
                   <label htmlFor="mergeChanceInput">
-                    Maze generation speed (ms):
+                    Maze generation speed:
                   </label>
 
                   <input
@@ -111,8 +110,7 @@ class Actions extends Component {
                   />
 
                   <small className="form-text text-muted">
-                    How fast you want the maze to generate. Units in
-                    milliseconds.
+                    Units in milliseconds.
                   </small>
                 </div>
               </div>
