@@ -2,12 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 class Cell extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   /**
-   * extract the walls object into a string with from 'cell border-left ...' according to what borders need to be shown
+   * extract the walls object into a string with from 'cell border-left ...'
+   * according to what borders need to be shown
    */
   getWallsToShow() {
     const { walls } = this.props;
