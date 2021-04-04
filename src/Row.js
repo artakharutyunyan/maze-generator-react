@@ -91,35 +91,25 @@ class Row extends Component {
     });
   }
 
-  joinCellsToSet(cells, prevSetId, newSetId) {
-    cells.map((cell) => {
-      if (cell.props.setID !== prevSetId) {
+  joinCellsToSet(cells, currentCellSetId, nextCellSetId) {
+    // drop walls between current and next cell
+    cells[this.currentCell].props.walls.right = false;
+    cells[this.currentCell + 1].props.walls.left = false;
+
+    // assign the current set id all cells having the same previous set ID
+    return cells.map((cell, i) => {
+      if (cell.props.setID !== nextCellSetId) {
         return cell;
       }
 
-      const walls = {
-        ...cell.props.walls,
-        right: false,
-      };
-
-      return <Cell setID={newSetId} active={cell.props.active} walls={walls} />;
+      return (
+        <Cell
+          setID={currentCellSetId}
+          active={cell.props.active}
+          walls={cell.props.walls}
+        />
+      );
     });
-
-    return cells;
-  }
-
-  joinCellToLastSet(cells) {
-    const walls = {
-      ...cells[this.currentCell].props.walls,
-      left: false,
-    };
-    return (
-      <Cell
-        setID={cells[this.currentCell - 1].props.setID}
-        active={true}
-        walls={walls}
-      />
-    );
   }
 
   joinSomeCells() {
@@ -149,17 +139,6 @@ class Row extends Component {
     }
 
     let cells = this.getCellsAndHighlightCurrent();
-
-    // if the current cell must be joined to the previous cell.
-    // Whether it will join or not was decided on the previous tick
-    // we just do the join in this tick so that it looks better visually
-    if (
-      cells[this.currentCell - 1] &&
-      !cells[this.currentCell - 1].props.walls.right
-    ) {
-      cells[this.currentCell] = this.joinCellToLastSet(cells);
-    }
-
     const currentCellSetId = cells[this.currentCell].props.setID;
 
     if (
@@ -167,12 +146,10 @@ class Row extends Component {
       this.currentCell < this.props.width - 1 &&
       currentCellSetId !== cells[this.currentCell + 1].props.setID
     ) {
-      // TODO: send the next set id and the current cell, to just open up the right
-      // wall for the current cell, but to change the set id for all who share the next cell's set
       cells = this.joinCellsToSet(
         cells,
-        cells[this.currentCell],
-        currentCellSetId
+        currentCellSetId,
+        cells[this.currentCell + 1].props.setID
       );
     }
 
@@ -187,18 +164,10 @@ class Row extends Component {
       ) {
         cells = this.joinCellsToSet(
           cells,
-          cells[this.currentCell].props.setID,
-          currentCellSetId
+          currentCellSetId,
+          cells[this.currentCell].props.setID
         );
       }
-
-      cells[this.currentCell] = (
-        <Cell
-          setID={cells[this.currentCell].props.setID}
-          active={true}
-          walls={cells[this.currentCell].props.walls}
-        />
-      );
     }
 
     this.setState({ cells });
