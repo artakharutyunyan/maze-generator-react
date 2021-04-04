@@ -1,6 +1,6 @@
 import React from "react";
 
-import Maze from "./Maze";
+import Maze from "./components/Maze";
 
 function App() {
   return <Maze />;

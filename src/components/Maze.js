@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import Row from "./Row.js";
 import Actions from "./Actions.js";
-import "./style.scss";
+import "../style.scss";
 
 class Maze extends Component {
   constructor() {
@@ -13,7 +13,6 @@ class Maze extends Component {
       rows: [],
       completed: false,
       speed: 0,
-      // the less chance, the more vertical walls
       chanceToJoin: 0.5,
       hasFormError: false,
     };
@@ -29,6 +28,7 @@ class Maze extends Component {
       rows: [
         <Row
           index={0}
+          key={0}
           width={this.state.width}
           chanceToJoin={this.state.chanceToJoin}
           speed={this.state.speed}
@@ -41,19 +41,18 @@ class Maze extends Component {
   }
 
   receiveCompleteRow(cells, index) {
-    // Done with the maze
     if (index === this.state.height - 1) {
       this.setState({ completed: true });
       return;
     }
 
-    // last row
     if (index === this.state.height - 2) {
       this.setState({
         rows: [
           ...this.state.rows,
           <Row
             index={index + 1}
+            key={index + 1}
             width={this.state.width}
             chanceToJoin={this.state.chanceToJoin}
             speed={this.state.speed}
@@ -68,12 +67,10 @@ class Maze extends Component {
 
     this.setState({
       rows: [
-        // react saves the state for the previous rows so we just need
-        // to spread them here again
         ...this.state.rows,
-        // the new row
         <Row
           index={index + 1}
+          key={index + 1}
           width={this.state.width}
           chanceToJoin={this.state.chanceToJoin}
           speed={this.state.speed}
@@ -84,9 +81,6 @@ class Maze extends Component {
     });
   }
 
-  // we want empty strings to represent empty inputs
-  // if we just leave Number(event.target.value), an empty input
-  // will turn to 0 (not good UX)
   mapToStateValue(event) {
     const value = event.target.value;
     if (value === "") {
@@ -113,9 +107,17 @@ class Maze extends Component {
   }
 
   isFormValid() {
-    const { width, height, chanceToJoin } = this.state;
+    const { width, height, chanceToJoin, speed } = this.state;
 
-    return width && height && chanceToJoin >= 0 && chanceToJoin <= 1;
+    return (
+      width &&
+      height &&
+      chanceToJoin !== "" &&
+      chanceToJoin >= 0 &&
+      chanceToJoin <= 1 &&
+      speed !== "" &&
+      speed >= 0
+    );
   }
 
   resetMaze(e) {

@@ -18,7 +18,10 @@ class Actions extends Component {
     return (
       <form className="actions">
         <div className="main-menu">
-          <button className="btn btn-primary" onClick={resetMaze}>
+          <button
+            className={`btn ${rows.length ? "btn-danger" : "btn-info"}`}
+            onClick={resetMaze}
+          >
             {rows.length ? "Clear Maze" : "Generate Maze"}
           </button>
         </div>
@@ -26,7 +29,7 @@ class Actions extends Component {
         {rows.length ? null : (
           <div>
             <div className="row">
-              <div className="col-12 col-sm-6 col-lg-3">
+              <div className="col-12 col-sm-6 col-lg-4 col-xl-3">
                 <div className="form-group">
                   <label htmlFor="widthInput">Width:</label>
 
@@ -41,12 +44,12 @@ class Actions extends Component {
                   />
 
                   <small className="form-text text-muted">
-                    The number of horizontal cells in the maze
+                    The number of horizontal cells
                   </small>
                 </div>
               </div>
 
-              <div className="col-12 col-sm-6 col-lg-3">
+              <div className="col-12 col-sm-6 col-lg-4 col-xl-3">
                 <div className="form-group">
                   <label htmlFor="heightInput">Height:</label>
 
@@ -61,14 +64,14 @@ class Actions extends Component {
                   />
 
                   <small className="form-text text-muted">
-                    The number of vertical cells in the maze
+                    The number of vertical cells
                   </small>
                 </div>
               </div>
             </div>
 
             <div className="row">
-              <div className="col-12 col-sm-6 col-lg-3">
+              <div className="col-12 col-sm-6 col-lg-4 col-xl-3">
                 <div className="form-group">
                   <label htmlFor="mergeChanceInput">
                     Merge chance (min 0 max 1):
@@ -85,13 +88,13 @@ class Actions extends Component {
                   />
 
                   <small className="form-text text-muted">
-                    Chance to join cells horizontally. values from 0 to 1. A
-                    high chance tends to create horizontal mazes while a low
-                    chance creates more vertical ones.
+                    Chance to join cells horizontally. A high chance tends to
+                    create horizontal mazes while a low chance creates more
+                    vertical ones.
                   </small>
                 </div>
               </div>
-              <div className="col-12 col-sm-6 col-lg-3">
+              <div className="col-12 col-sm-6 col-lg-4 col-xl-3">
                 <div className="form-group">
                   <label htmlFor="mergeChanceInput">
                     Maze generation speed (ms):
@@ -109,8 +112,7 @@ class Actions extends Component {
 
                   <small className="form-text text-muted">
                     How fast you want the maze to generate. Units in
-                    milliseconds. Slower speed gives you a better visual insight
-                    on how the algorithm works
+                    milliseconds.
                   </small>
                 </div>
               </div>

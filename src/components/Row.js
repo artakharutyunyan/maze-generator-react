@@ -6,7 +6,6 @@ import Cell from "./Cell.js";
 class Row extends Component {
   constructor(props) {
     super(props);
-    // the index of the cell inside the row
     this.currentCell = 0;
     this.timesTicked = 0;
     this.initialWalls = {
@@ -44,7 +43,6 @@ class Row extends Component {
       top: previousRowCells ? false : true,
     };
 
-    // if the above cell is connected, use its setID
     if (
       previousRowCells &&
       !previousRowCells[this.currentCell].props.walls.bottom
@@ -54,8 +52,6 @@ class Row extends Component {
       setID = this.generateNewSetId();
     }
 
-    // check if there will be a
-    // random vertical connection
     if (this.willJoinVertical() && !this.props.lastRow) {
       walls = {
         ...walls,
@@ -63,7 +59,7 @@ class Row extends Component {
       };
     }
 
-    newCell = <Cell setID={setID} walls={walls} />;
+    newCell = <Cell setID={setID} walls={walls} key={this.currentCell} />;
 
     this.setState({
       cells: [...this.state.cells, newCell],
@@ -82,62 +78,35 @@ class Row extends Component {
   getCellsAndHighlightCurrent() {
     return this.state.cells.map((cell, i) => {
       if (i !== this.currentCell) {
-        return (
-          <Cell
-            setID={cell.props.setID}
-            active={false}
-            walls={cell.props.walls}
-          />
-        );
+        return <Cell {...cell.props} key={i} active={false} />;
       }
-      return (
-        <Cell setID={cell.props.setID} active={true} walls={cell.props.walls} />
-      );
+      return <Cell {...cell.props} key={i} active={true} />;
     });
   }
 
   joinCellsToSet(cells, currentCellSetId, nextCellSetId) {
-    // drop walls between current and next cell
     cells[this.currentCell].props.walls.right = false;
     cells[this.currentCell + 1].props.walls.left = false;
 
-    // assign the current set id all cells having the same previous set ID
     return cells.map((cell, i) => {
       if (cell.props.setID !== nextCellSetId) {
         return cell;
       }
 
-      return (
-        <Cell
-          setID={currentCellSetId}
-          active={cell.props.active}
-          walls={cell.props.walls}
-        />
-      );
+      return <Cell {...cell.props} key={i} setID={currentCellSetId} />;
     });
   }
 
   joinSomeCells() {
-    // after ensuring vertical connections
     if (this.currentCell > this.props.width) {
       clearInterval(this.timerID);
-      // remove the active style
       const cells = this.state.cells.map((cell, i) => {
-        return (
-          <Cell
-            setID={cell.props.setID}
-            active={false}
-            walls={cell.props.walls}
-          />
-        );
+        return <Cell {...cell.props} key={i} active={false} />;
       });
       this.setState({ cells });
-      // tell the Maze that the row is done, so we can pass
-      // the state of the row to the next Row
       this.props.sendRowState(this.state.cells, this.props.index);
       return;
     }
-    // after the rows have been joined
     if (this.currentCell > this.props.width - 1) {
       this.ensureVerticalConnections();
       return;
@@ -159,9 +128,6 @@ class Row extends Component {
       );
     }
 
-    // if last set,
-    // - give bottom walls
-    // - knock down walls between cells that are from different sets
     if (this.props.lastRow) {
       if (
         cells[this.currentCell + 1] &&
@@ -179,15 +145,11 @@ class Row extends Component {
     this.setState({ cells });
   }
 
-  // after the row has been created, ensure that atleast
-  // one vertical connection exists per set
-  // if not, randomly assign one
   ensureVerticalConnections() {
     if (this.props.lastRow) {
       return;
     }
 
-    // with form {[setID]: cellsBelongingToSet[]}
     const setMap = {};
     this.state.cells.forEach((cell, i) => {
       const setID = cell.props.setID;
@@ -197,7 +159,6 @@ class Row extends Component {
       setMap[setID].push(i);
     });
 
-    // O(n) since it traverses all cells only once
     const cellsToAddVerticalConnection = Object.keys(setMap).map((key) => {
       let hasAVerticalConnection = false;
       setMap[key].forEach((cellIndex) => {
@@ -207,7 +168,6 @@ class Row extends Component {
       });
 
       if (hasAVerticalConnection) return null;
-      // randomly choose a vertical connection
       const randomCell =
         setMap[key][Math.floor(Math.random() * setMap[key].length)];
       return randomCell;
@@ -225,14 +185,14 @@ class Row extends Component {
 
       return (
         <Cell
-          setID={cell.props.setID}
+          {...cell.props}
+          key={i}
           active={i === this.props.width - 1 ? true : false}
           walls={walls}
         />
       );
     });
 
-    // set state
     this.setState({ cells });
   }
 
